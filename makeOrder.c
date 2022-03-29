@@ -69,4 +69,3 @@ int main(int argc,char **argv){
     strcat(order,total);
     write_file(fd_to,order);
     return 0;
-}
