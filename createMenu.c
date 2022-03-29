@@ -21,20 +21,20 @@ int get_price(char *input){
     int price;
     char *tmp = strrchr(input, ' ');
     price = atoi(tmp);
-    input[strcspn(input,tmp)]=0;
+    input[strcspn(input,tmp)] = 0;
     return price;
 }
 
-void write_item(int fd,char *buffer)
+void write_item(int fd,char *input)
 {
-    int price = get_price(buffer);
-    int bsize = strlen(buffer);
-    char tmp[1024], pad_str[MAX_PAD];
+    int price = get_price(input);
+    int bsize = strlen(input);
+    char buffer[1024], pad_str[MAX_PAD];
 
     memset(pad_str,'.',MAX_PAD-bsize);
 
-    sprintf(tmp,"  %s %.*s %dNIS\n",buffer,MAX_PAD - bsize,pad_str,price);
-    write_file(fd, tmp);
+    sprintf(buffer,"  %s %.*s %dNIS\n",input,MAX_PAD - bsize,pad_str,price);
+    write_file(fd, buffer);
 }
 
 
@@ -58,7 +58,7 @@ int create_files(char *res_name){
 int main(int argc, char **argv)
 {
     int menu_fd;
-    char input[256], *buffer;
+    char input[256], buffer[1024];
 
     if (argc != 3 || atoi(argv[2]) > 26){
         perror("Argument error");return (-1);}
@@ -74,10 +74,9 @@ int main(int argc, char **argv)
         while (1){
             printf("Insert dish number %d:\n", j++);
             fgets(input, 254, stdin);
-            if (strcmp(input, "stop\n") == 0)
-                break;
-
             input[strcspn(input, "\n")] = 0;
+            if (strcmp(input, "stop") == 0)
+                break;
             write_item(menu_fd,input);
         }
     }
