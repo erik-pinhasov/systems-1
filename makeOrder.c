@@ -15,9 +15,19 @@ int write_file(int fd, char *buffer)
     return 0;
 }
 
+int confirm(char *order, int sum){
+    char conf[20];
+    sprintf(order, "\nTotal price: %d NIS", sum);
+    printf("(Confirm to approve/else cancle)\n");
+    fgets(conf,10,stdin);   
+    if (strcmp(conf,"Confirm\n") != 0)
+        return 0;
+    return 1;
+}
+
 int price(int fd_from, char *dish){
-    char *price, *temp, buffer[256], input[256],*tmp2;
-    int rbytes, quant;
+    char *pr = "\0", *temp, buffer[256], input[256],*tmp2;
+    int price=0,rbytes, quant;
     temp = malloc(50*(sizeof(char)+1));
     strcpy(temp,dish);
     quant = atoi(strrchr(dish, ' '));
@@ -26,16 +36,18 @@ int price(int fd_from, char *dish){
         rbytes = read(fd_from,buffer,255);
         if ((tmp2 = strstr(buffer, temp)) == NULL)
             continue;
-        price = strtok_r(tmp2,"NIS",&tmp2);
-        price = strrchr(price,' ');
+        pr = strtok_r(tmp2,"NIS",&tmp2);
+        pr = strrchr(pr,' ');
     }while (rbytes > 0);
     free(temp);
-    return (atoi(price)*(quant));
+    price = atoi(pr);
+    lseek(fd_from, 0, SEEK_SET);
+    return price*quant;
 }
 
 int main(int argc,char **argv){
-    int totalp = 0, fd_from, fd_to, sum = 0;
-    char rest[50], input[256], total[256], order[1024] = "\0", conf[10];
+    int fd_from, fd_to, sum = 0, flag=1;
+    char rest[50], input[256], order[1024] = "\0";
     if (argc != 3){
         perror("argument error");
         exit (1);
@@ -43,15 +55,15 @@ int main(int argc,char **argv){
     sprintf(rest,"%s.txt",argv[1]);
     fd_from = open(rest, O_RDONLY);
     if (fd_from == -1){
-            perror("file from");
-            exit (1);
+        perror("file from");
+        exit (1);
     }
     sprintf(rest,"%s_Order/%s.txt",argv[1],argv[2]);
     if ((fd_to = open(rest, O_WRONLY | O_CREAT, 0664)) == -1){
-            perror("file to");
-            exit (1);
+        perror("file to");
+        exit (1);
     }
-    while (1){
+    while (flag){
         printf("Insert your order (Finish to finish):\n");
         fgets(input, 255, stdin);
         input[strcspn(input,"\n")] = 0;
@@ -61,12 +73,7 @@ int main(int argc,char **argv){
         strcat(input,"\n");
         strcat(order,input);
     }
-    sprintf(total, "\nTotal price: %d NIS", sum);
-    printf("(Confirm to approve/else cancle)\n");
-    fgets(conf,10,stdin);   
-    if (strcmp(conf,"Confirm\n") != 0)
-        exit(1);
-    strcat(order,total);
-    write_file(fd_to,order);
+    if (confirm(order,sum))
+        write_file(fd_to,order);
     return 0;
 }
