@@ -1,6 +1,0 @@
-bbb_Menu
- a. burger
-  small .................... 10NIS
-  medium ................... 15NIS
-  large .................... 20NIS
-               Bon Apetit

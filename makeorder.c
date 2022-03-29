@@ -34,7 +34,7 @@ int price(int fd_from, char *dish){
 }
 
 int main(int argc,char **argv){
-    int totalp = 0, fd_from, fd_to, wbytes, sum = 0;
+    int totalp = 0, fd_from, fd_to, sum = 0;
     char rest[50], input[256], total[256], order[1024] = "\0", conf[10];
     if (argc != 3){
         perror("argument error");
