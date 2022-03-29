@@ -18,7 +18,7 @@ int write_file(int fd, char *buffer)
 int confirm(char *order, int sum){
     char conf[20];
     sprintf(order, "\nTotal price: %d NIS", sum);
-    printf("(Confirm to approve/else cancle)\n");
+    printf("%s (Confirm to approve/else cancle)\n",order);
     fgets(conf,10,stdin);   
     if (strcmp(conf,"Confirm\n") != 0)
         return 0;
@@ -46,7 +46,7 @@ int price(int fd_from, char *dish){
 }
 
 int main(int argc,char **argv){
-    int fd_from, fd_to, sum = 0, flag=1;
+    int fd_from, fd_to, sum = 0;
     char rest[50], input[256], order[1024] = "\0";
     if (argc != 3){
         perror("argument error");
@@ -63,7 +63,7 @@ int main(int argc,char **argv){
         perror("file to");
         exit (1);
     }
-    while (flag){
+    while (1){
         printf("Insert your order (Finish to finish):\n");
         fgets(input, 255, stdin);
         input[strcspn(input,"\n")] = 0;
