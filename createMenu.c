@@ -14,20 +14,21 @@ int write_file(int fd, char *buffer)
     if (writed != strlen(buffer) || writed == -1){
         perror("Writing error");exit(-1);
     }
+    memset(buffer,0,strlen(buffer));
     return 0;
 }
 
-int get_price(char *input){
+int get_price(char **input){
     int price;
-    char *tmp = strrchr(input, ' ');
+    char *tmp = strrchr(*input, ' ');
     price = atoi(tmp);
-    input[strcspn(input,tmp)] = 0;
+    input[strcspn(*input,tmp)] = 0;
     return price;
 }
 
 void write_item(int fd,char *input)
 {
-    int price = get_price(input);
+    int price = get_price(&input);
     int bsize = strlen(input);
     char buffer[1024], pad_str[MAX_PAD];
 
