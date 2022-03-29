@@ -1,5 +1,5 @@
 createMenu
 getPrice
 advShell
-* _Order
-* .txt
+*/*_Order/*
+*.txt
