@@ -6,21 +6,21 @@
 int main(int argc, char **argv)
 {
     int ord_number=0;
-    char ordir[256];
-    DIR *ord_ptr;
+    char path[256];
+    DIR *dir_ptr;
     if (argc != 2){
         perror("args error");exit(1);
     }
-    sprintf(ordir,"./%s_Order",argv[1]);
+    sprintf(path,"./%s_Order",argv[1]);
     struct dirent *order_dir;
-    ord_ptr = opendir(ordir);
-    if (ord_ptr)
+    dir_ptr = opendir(path);
+    if (dir_ptr)
     {
-        while ((order_dir = readdir(ord_ptr)) != NULL){
+        while ((order_dir = readdir(dir_ptr)) != NULL){
             if (strcmp(order_dir->d_name,".") != 0 && strcmp(order_dir->d_name,"..") !=0 )
                 ord_number++;
         }
-        closedir(ord_ptr);
+        closedir(dir_ptr);
     }
     if (ord_number > 0)
         printf("%d\n",ord_number);
