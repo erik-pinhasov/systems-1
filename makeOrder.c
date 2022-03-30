@@ -20,7 +20,7 @@ void write_file(int fd, char *buffer) //Write to order txt file
     if (writed != strlen(buffer) || writed == -1){
         perror("Writing error"); exit(-1);
     }
-}/
+}
 
 int confirm(char *order, int sum){
     //Check if approve an order: return 1 for 'Confirm', else 0
