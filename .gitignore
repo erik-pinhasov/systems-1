@@ -1,8 +1,13 @@
 createMenu
 getPrice
 advShell
+<<<<<<< HEAD
 numorder
 makeOrder
 */*_Order/*
 *.txt
 *.out
+=======
+*/*_Order/*
+*.txt
+>>>>>>> erik
